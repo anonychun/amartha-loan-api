@@ -6,6 +6,7 @@ import (
 	"github.com/anonychun/amartha-loan-api/internal/consts"
 	"github.com/anonychun/amartha-loan-api/internal/current"
 	"github.com/anonychun/amartha-loan-api/internal/entity"
+	"github.com/anonychun/amartha-loan-api/internal/repository"
 )
 
 func (u *Usecase) SignUp(ctx context.Context, req SignUpRequest) (*SignUpResponse, error) {
@@ -29,7 +30,7 @@ func (u *Usecase) SignUp(ctx context.Context, req SignUpRequest) (*SignUpRespons
 	}
 
 	res := &SignUpResponse{}
-	err = u.repository.Transaction(ctx, func(ctx context.Context) error {
+	err = repository.Transaction(ctx, func(ctx context.Context) error {
 		err := u.repository.Borrower.Create(ctx, borrower)
 		if err != nil {
 			return err
