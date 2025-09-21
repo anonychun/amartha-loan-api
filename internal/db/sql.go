@@ -9,7 +9,7 @@ import (
 	"github.com/anonychun/amartha-loan-api/internal/bootstrap"
 	"github.com/anonychun/amartha-loan-api/internal/config"
 	"github.com/anonychun/amartha-loan-api/internal/current"
-	"github.com/samber/do"
+	"github.com/samber/do/v2"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -24,7 +24,7 @@ type Sql struct {
 	sqlDB  *sql.DB
 }
 
-func NewSql(i *do.Injector) (*Sql, error) {
+func NewSql(i do.Injector) (*Sql, error) {
 	cfg := do.MustInvoke[*config.Config](i)
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable",
 		cfg.Database.Sql.Host,

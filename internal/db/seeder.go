@@ -5,7 +5,7 @@ import (
 
 	"github.com/anonychun/amartha-loan-api/internal/bootstrap"
 	"github.com/anonychun/amartha-loan-api/internal/entity"
-	"github.com/samber/do"
+	"github.com/samber/do/v2"
 	"gorm.io/gorm"
 )
 
@@ -17,7 +17,7 @@ type Seeder struct {
 	sql *Sql
 }
 
-func NewSeeder(i *do.Injector) (*Seeder, error) {
+func NewSeeder(i do.Injector) (*Seeder, error) {
 	return &Seeder{
 		sql: do.MustInvoke[*Sql](i),
 	}, nil

@@ -12,7 +12,7 @@ import (
 	"github.com/anonychun/amartha-loan-api/internal/bootstrap"
 	"github.com/anonychun/amartha-loan-api/internal/config"
 	"github.com/labstack/echo/v4"
-	"github.com/samber/do"
+	"github.com/samber/do/v2"
 )
 
 func Start(ctx context.Context) error {

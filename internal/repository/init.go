@@ -16,7 +16,7 @@ import (
 	"github.com/anonychun/amartha-loan-api/internal/repository/investor"
 	"github.com/anonychun/amartha-loan-api/internal/repository/investor_session"
 	"github.com/anonychun/amartha-loan-api/internal/repository/loan"
-	"github.com/samber/do"
+	"github.com/samber/do/v2"
 	"gorm.io/gorm"
 )
 
@@ -37,18 +37,18 @@ type Repository struct {
 	Loan            *loan.Repository
 }
 
-func NewRepository(i *do.Injector) (*Repository, error) {
+func NewRepository(i do.Injector) (*Repository, error) {
 	return &Repository{
-		Admin:           do.MustInvokeNamed[*admin.Repository](i, admin.RepositoryInjectorName),
-		AdminSession:    do.MustInvokeNamed[*admin_session.Repository](i, admin_session.RepositoryInjectorName),
-		Approval:        do.MustInvokeNamed[*approval.Repository](i, approval.RepositoryInjectorName),
-		Borrower:        do.MustInvokeNamed[*borrower.Repository](i, borrower.RepositoryInjectorName),
-		BorrowerSession: do.MustInvokeNamed[*borrower_session.Repository](i, borrower_session.RepositoryInjectorName),
-		Disbursement:    do.MustInvokeNamed[*disbursement.Repository](i, disbursement.RepositoryInjectorName),
-		Investment:      do.MustInvokeNamed[*investment.Repository](i, investment.RepositoryInjectorName),
-		Investor:        do.MustInvokeNamed[*investor.Repository](i, investor.RepositoryInjectorName),
-		InvestorSession: do.MustInvokeNamed[*investor_session.Repository](i, investor_session.RepositoryInjectorName),
-		Loan:            do.MustInvokeNamed[*loan.Repository](i, loan.RepositoryInjectorName),
+		Admin:           do.MustInvoke[*admin.Repository](i),
+		AdminSession:    do.MustInvoke[*admin_session.Repository](i),
+		Approval:        do.MustInvoke[*approval.Repository](i),
+		Borrower:        do.MustInvoke[*borrower.Repository](i),
+		BorrowerSession: do.MustInvoke[*borrower_session.Repository](i),
+		Disbursement:    do.MustInvoke[*disbursement.Repository](i),
+		Investment:      do.MustInvoke[*investment.Repository](i),
+		Investor:        do.MustInvoke[*investor.Repository](i),
+		InvestorSession: do.MustInvoke[*investor_session.Repository](i),
+		Loan:            do.MustInvoke[*loan.Repository](i),
 	}, nil
 }
 

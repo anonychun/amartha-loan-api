@@ -5,18 +5,13 @@ import (
 	"github.com/anonychun/amartha-loan-api/internal/app/api/v1/borrower"
 	"github.com/anonychun/amartha-loan-api/internal/app/api/v1/investor"
 	"github.com/anonychun/amartha-loan-api/internal/bootstrap"
-	"github.com/samber/do"
+	"github.com/samber/do/v2"
 )
 
 func init() {
-	do.ProvideNamed(bootstrap.Injector, UsecaseInjectorName, NewUsecase)
-	do.ProvideNamed(bootstrap.Injector, HandlerInjectorName, NewHandler)
+	do.Provide(bootstrap.Injector, NewUsecase)
+	do.Provide(bootstrap.Injector, NewHandler)
 }
-
-const (
-	UsecaseInjectorName = "usecase.api.v1"
-	HandlerInjectorName = "handler.api.v1"
-)
 
 type Usecase struct {
 	Admin    *admin.Usecase
@@ -24,11 +19,11 @@ type Usecase struct {
 	Investor *investor.Usecase
 }
 
-func NewUsecase(i *do.Injector) (*Usecase, error) {
+func NewUsecase(i do.Injector) (*Usecase, error) {
 	return &Usecase{
-		Admin:    do.MustInvokeNamed[*admin.Usecase](i, admin.UsecaseInjectorName),
-		Borrower: do.MustInvokeNamed[*borrower.Usecase](i, borrower.UsecaseInjectorName),
-		Investor: do.MustInvokeNamed[*investor.Usecase](i, investor.UsecaseInjectorName),
+		Admin:    do.MustInvoke[*admin.Usecase](i),
+		Borrower: do.MustInvoke[*borrower.Usecase](i),
+		Investor: do.MustInvoke[*investor.Usecase](i),
 	}, nil
 }
 
@@ -38,10 +33,10 @@ type Handler struct {
 	Investor *investor.Handler
 }
 
-func NewHandler(i *do.Injector) (*Handler, error) {
+func NewHandler(i do.Injector) (*Handler, error) {
 	return &Handler{
-		Admin:    do.MustInvokeNamed[*admin.Handler](i, admin.HandlerInjectorName),
-		Borrower: do.MustInvokeNamed[*borrower.Handler](i, borrower.HandlerInjectorName),
-		Investor: do.MustInvokeNamed[*investor.Handler](i, investor.HandlerInjectorName),
+		Admin:    do.MustInvoke[*admin.Handler](i),
+		Borrower: do.MustInvoke[*borrower.Handler](i),
+		Investor: do.MustInvoke[*investor.Handler](i),
 	}, nil
 }

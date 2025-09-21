@@ -7,7 +7,7 @@ import (
 
 	"github.com/anonychun/amartha-loan-api/internal/bootstrap"
 	"github.com/anonychun/amartha-loan-api/internal/db"
-	"github.com/samber/do"
+	"github.com/samber/do/v2"
 	"github.com/urfave/cli/v3"
 )
 
