@@ -49,7 +49,7 @@ CREATE TABLE investors (
 
 CREATE TABLE investor_sessions (
 	id UUID PRIMARY KEY,
-	investor_id UUID REFERENCES investors(id),
+	investor_id UUID NOT NULL REFERENCES investors(id),
 	token TEXT NOT NULL UNIQUE,
 	ip_address TEXT NOT NULL,
 	user_agent TEXT NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE loans (
 
 CREATE TABLE approvals (
 	id UUID PRIMARY KEY,
-	loan_id UUID NOT NULL REFERENCES loans(id),
+	loan_id UUID NOT NULL UNIQUE REFERENCES loans(id),
 	admin_id UUID NOT NULL REFERENCES admins(id),
 	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 	updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -76,8 +76,8 @@ CREATE TABLE approvals (
 
 CREATE TABLE investments (
 	id UUID PRIMARY KEY,
-	loan_id UUID REFERENCES loans(id),
-	investor_id UUID REFERENCES investors(id),
+	loan_id UUID NOT NULL REFERENCES loans(id),
+	investor_id UUID NOT NULL REFERENCES investors(id),
 	amount BIGINT NOT NULL,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 	updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -85,8 +85,8 @@ CREATE TABLE investments (
 
 CREATE TABLE disbursements (
 	id UUID PRIMARY KEY,
-	loan_id UUID REFERENCES loans(id),
-	admin_id UUID REFERENCES admins(id),
+	loan_id UUID NOT NULL UNIQUE REFERENCES loans(id),
+	admin_id UUID NOT NULL REFERENCES admins(id),
 	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 	updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
