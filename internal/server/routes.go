@@ -35,6 +35,10 @@ func routes(e *echo.Echo) error {
 			e.GET("/admin/:id", h.Api.V1.Admin.Admin.FindById)
 			e.POST("/admin", h.Api.V1.Admin.Admin.Create)
 			e.PUT("/admin/:id", h.Api.V1.Admin.Admin.Update)
+
+			e.GET("/loan", h.Api.V1.Admin.Loan.FindAll)
+			e.POST("/loan/:id/approve", h.Api.V1.Admin.Loan.Approve)
+			e.POST("/loan/:id/disburse", h.Api.V1.Admin.Loan.Disburse)
 		})
 
 		namespace(e, "/borrower", func(e *echo.Group) {
@@ -44,6 +48,9 @@ func routes(e *echo.Echo) error {
 			e.POST("/auth/signin", h.Api.V1.Borrower.Auth.SignIn)
 			e.POST("/auth/signout", h.Api.V1.Borrower.Auth.SignOut)
 			e.GET("/auth/me", h.Api.V1.Borrower.Auth.Me)
+
+			e.GET("/loan", h.Api.V1.Borrower.Loan.FindAll)
+			e.POST("/loan", h.Api.V1.Borrower.Loan.Create)
 		})
 
 		namespace(e, "/investor", func(e *echo.Group) {
@@ -53,6 +60,9 @@ func routes(e *echo.Echo) error {
 			e.POST("/auth/signin", h.Api.V1.Investor.Auth.SignIn)
 			e.POST("/auth/signout", h.Api.V1.Investor.Auth.SignOut)
 			e.GET("/auth/me", h.Api.V1.Investor.Auth.Me)
+
+			e.GET("/loan", h.Api.V1.Investor.Loan.FindAll)
+			e.POST("/loan/:id/invest", h.Api.V1.Investor.Loan.Invest)
 		})
 	})
 

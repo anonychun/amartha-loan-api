@@ -2,6 +2,7 @@ package investor
 
 import (
 	"github.com/anonychun/amartha-loan-api/internal/app/api/v1/investor/auth"
+	"github.com/anonychun/amartha-loan-api/internal/app/api/v1/investor/loan"
 	"github.com/anonychun/amartha-loan-api/internal/bootstrap"
 	"github.com/samber/do"
 )
@@ -18,20 +19,24 @@ const (
 
 type Usecase struct {
 	Auth *auth.Usecase
+	Loan *loan.Usecase
 }
 
 func NewUsecase(i *do.Injector) (*Usecase, error) {
 	return &Usecase{
 		Auth: do.MustInvokeNamed[*auth.Usecase](i, auth.UsecaseInjectorName),
+		Loan: do.MustInvokeNamed[*loan.Usecase](i, loan.UsecaseInjectorName),
 	}, nil
 }
 
 type Handler struct {
 	Auth *auth.Handler
+	Loan *loan.Handler
 }
 
 func NewHandler(i *do.Injector) (*Handler, error) {
 	return &Handler{
 		Auth: do.MustInvokeNamed[*auth.Handler](i, auth.HandlerInjectorName),
+		Loan: do.MustInvokeNamed[*loan.Handler](i, loan.HandlerInjectorName),
 	}, nil
 }

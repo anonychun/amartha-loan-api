@@ -15,4 +15,9 @@ var (
 	ErrEmailAddressAlreadyRegistered = &api.Error{Status: http.StatusConflict, Errors: "Email address already registered"}
 
 	ErrAdminNotFound = &api.Error{Status: http.StatusNotFound, Errors: "Admin not found"}
+
+	ErrLoanNotFound                           = &api.Error{Status: http.StatusNotFound, Errors: "Loan not found"}
+	ErrInvalidLoanState                       = &api.Error{Status: http.StatusUnprocessableEntity, Errors: "Invalid loan state"}
+	ErrLoanNotAvailableForInvestment          = &api.Error{Status: http.StatusUnprocessableEntity, Errors: "Loan is not available for investment"}
+	ErrInvestmentAmountExceedsAvailableAmount = &api.Error{Status: http.StatusUnprocessableEntity, Errors: "Investment amount exceeds available amount"}
 )
