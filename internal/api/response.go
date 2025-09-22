@@ -1,6 +1,7 @@
 package api
 
 import (
+	"log/slog"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -50,6 +51,8 @@ func (r *Response) SetErrors(err error) *Response {
 		r.SetStatus(e.Code)
 		r.body.Errors = echo.Map{"message": e.Message}
 	default:
+		slog.Error("got unexpected error", slog.Any("err", err))
+
 		r.SetStatus(http.StatusInternalServerError)
 		r.body.Errors = echo.Map{"message": "Something went wrong"}
 	}

@@ -36,6 +36,21 @@ func (u *Usecase) Approve(ctx context.Context, req ApproveRequest) (*LoanDto, er
 	}
 
 	err = repository.Transaction(ctx, func(ctx context.Context) error {
+		proofOfVisit, err := entity.NewAttachmentFromMultipartFileHeader(req.ProofOfVisit)
+		if err != nil {
+			return err
+		}
+
+		err = u.s3.Put(ctx, proofOfVisit.ObjectName, proofOfVisit.Content, proofOfVisit.ByteSize)
+		if err != nil {
+			return err
+		}
+
+		err = u.repository.Attachment.Create(ctx, proofOfVisit)
+		if err != nil {
+			return err
+		}
+
 		loan.Status = entity.LoanStatusApproved
 		err = u.repository.Loan.Update(ctx, loan)
 		if err != nil {
@@ -43,8 +58,9 @@ func (u *Usecase) Approve(ctx context.Context, req ApproveRequest) (*LoanDto, er
 		}
 
 		approval := &entity.Approval{
-			LoanId:  loan.Id,
-			AdminId: current.Admin(ctx).Id,
+			LoanId:         loan.Id,
+			AdminId:        current.Admin(ctx).Id,
+			ProofOfVisitId: proofOfVisit.Id,
 		}
 
 		err = u.repository.Approval.Create(ctx, approval)

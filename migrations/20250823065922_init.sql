@@ -1,5 +1,14 @@
 -- +goose Up
 -- +goose StatementBegin
+CREATE TABLE attachments (
+	id UUID PRIMARY KEY,
+	object_name TEXT NOT NULL,
+	file_name TEXT NOT NULL,
+	byte_size BIGINT NOT NULL,
+	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+	updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 CREATE TABLE admins (
 	id UUID PRIMARY KEY,
 	name TEXT NOT NULL,
@@ -70,6 +79,7 @@ CREATE TABLE approvals (
 	id UUID PRIMARY KEY,
 	loan_id UUID NOT NULL UNIQUE REFERENCES loans(id),
 	admin_id UUID NOT NULL REFERENCES admins(id),
+	proof_of_visit_id UUID NOT NULL REFERENCES attachments(id),
 	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 	updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -113,4 +123,6 @@ DROP TABLE borrowers;
 DROP TABLE admin_sessions;
 
 DROP TABLE admins;
+
+DROP TABLE attachments;
 -- +goose StatementEnd

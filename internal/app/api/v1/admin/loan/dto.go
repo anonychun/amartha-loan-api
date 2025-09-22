@@ -1,6 +1,7 @@
 package loan
 
 import (
+	"mime/multipart"
 	"time"
 
 	"github.com/anonychun/amartha-loan-api/internal/entity"
@@ -27,7 +28,8 @@ func ToLoanDto(loan *entity.Loan) *LoanDto {
 }
 
 type ApproveRequest struct {
-	Id string `param:"id"`
+	Id           string                `param:"id"`
+	ProofOfVisit *multipart.FileHeader `form:"proofOfVisit"`
 }
 
 type DisburseRequest struct {

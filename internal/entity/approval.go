@@ -8,13 +8,15 @@ import (
 )
 
 type Approval struct {
-	Id        uuid.UUID
-	LoanId    uuid.UUID
-	Loan      *Loan
-	AdminId   uuid.UUID
-	Admin     *Admin
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	Id             uuid.UUID
+	LoanId         uuid.UUID
+	Loan           *Loan
+	AdminId        uuid.UUID
+	Admin          *Admin
+	ProofOfVisitId uuid.UUID
+	ProofOfVisit   *Attachment
+	CreatedAt      time.Time
+	UpdatedAt      time.Time
 }
 
 func (a *Approval) BeforeCreate(tx *gorm.DB) error {
