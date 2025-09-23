@@ -16,6 +16,16 @@ func (r *Repository) FindById(ctx context.Context, id string) (*entity.Loan, err
 	return loan, nil
 }
 
+func (r *Repository) FindByIdWithAgreementLetter(ctx context.Context, id string) (*entity.Loan, error) {
+	loan := &entity.Loan{}
+	err := r.sql.DB(ctx).Joins("AgreementLetter").First(loan, "loans.id = ?", id).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return loan, nil
+}
+
 func (r *Repository) FindAllOrderByIdDesc(ctx context.Context) ([]*entity.Loan, error) {
 	loans := make([]*entity.Loan, 0)
 	err := r.sql.DB(ctx).Order("id DESC").Find(&loans).Error

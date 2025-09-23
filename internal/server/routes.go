@@ -37,6 +37,7 @@ func routes(e *echo.Echo) error {
 			e.PUT("/admin/:id", h.Api.V1.Admin.Admin.Update)
 
 			e.GET("/loan", h.Api.V1.Admin.Loan.FindAll)
+			e.GET("/loan/:id", h.Api.V1.Admin.Loan.FindById)
 			e.POST("/loan/:id/approve", h.Api.V1.Admin.Loan.Approve)
 			e.POST("/loan/:id/disburse", h.Api.V1.Admin.Loan.Disburse)
 		})

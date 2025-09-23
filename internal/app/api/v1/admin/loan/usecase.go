@@ -5,6 +5,7 @@ import (
 
 	"github.com/anonychun/amartha-loan-api/internal/consts"
 	"github.com/anonychun/amartha-loan-api/internal/current"
+	"github.com/anonychun/amartha-loan-api/internal/dto"
 	"github.com/anonychun/amartha-loan-api/internal/entity"
 	"github.com/anonychun/amartha-loan-api/internal/repository"
 	"github.com/samber/lo"
@@ -19,6 +20,27 @@ func (u *Usecase) FindAll(ctx context.Context) ([]*LoanDto, error) {
 	res := lo.Map(loans, func(loan *entity.Loan, _ int) *LoanDto {
 		return ToLoanDto(loan)
 	})
+
+	return res, nil
+}
+
+func (u *Usecase) FindById(ctx context.Context, req FindByIdRequest) (*LoanDto, error) {
+	loan, err := u.repository.Loan.FindByIdWithAgreementLetter(ctx, req.Id)
+	if err == consts.ErrRecordNotFound {
+		return nil, consts.ErrLoanNotFound
+	} else if err != nil {
+		return nil, err
+	}
+
+	res := ToLoanDto(loan)
+	if loan.AgreementLetter != nil {
+		agreementLetter, err := dto.NewAttachment(u.s3, loan.AgreementLetter)
+		if err != nil {
+			return nil, err
+		}
+
+		res.AgreementLetter = agreementLetter
+	}
 
 	return res, nil
 }
@@ -90,7 +112,24 @@ func (u *Usecase) Disburse(ctx context.Context, req DisburseRequest) (*LoanDto, 
 	}
 
 	repository.Transaction(ctx, func(ctx context.Context) error {
+		agreementLetter, err := entity.NewAttachmentFromMultipartFileHeader(req.AgreementLetter)
+		if err != nil {
+			return err
+		}
+
+		err = u.s3.Put(ctx, agreementLetter.ObjectName, agreementLetter.Content, agreementLetter.ByteSize)
+		if err != nil {
+			return err
+		}
+
+		err = u.repository.Attachment.Create(ctx, agreementLetter)
+		if err != nil {
+			return err
+		}
+
+		loan.AgreementLetterId = &agreementLetter.Id
 		loan.Status = entity.LoanStatusDisbursed
+
 		err = u.repository.Loan.Update(ctx, loan)
 		if err != nil {
 			return err
