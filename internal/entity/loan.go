@@ -8,15 +8,17 @@ import (
 )
 
 type Loan struct {
-	Id                uuid.UUID
-	BorrowerId        uuid.UUID
-	Borrower          *Borrower
-	PrincipalAmount   int64
-	Status            LoanStatus
-	AgreementLetterId *uuid.UUID
-	AgreementLetter   *Attachment `gorm:"foreignKey:AgreementLetterId"`
-	CreatedAt         time.Time
-	UpdatedAt         time.Time
+	Id                   uuid.UUID
+	BorrowerId           uuid.UUID
+	Borrower             *Borrower
+	PrincipalAmount      int64
+	Status               LoanStatus
+	BorrowerInterestRate float64
+	InvestorRoiRate      float64
+	AgreementLetterId    *uuid.UUID
+	AgreementLetter      *Attachment `gorm:"foreignKey:AgreementLetterId"`
+	CreatedAt            time.Time
+	UpdatedAt            time.Time
 }
 
 type LoanStatus string

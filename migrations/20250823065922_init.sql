@@ -71,6 +71,8 @@ CREATE TABLE loans (
 	borrower_id UUID NOT NULL REFERENCES borrowers(id),
 	principal_amount BIGINT NOT NULL,
 	status TEXT NOT NULL,
+	borrower_interest_rate NUMERIC NOT NULL,
+	investor_roi_rate NUMERIC NOT NULL,
 	agreement_letter_id UUID REFERENCES attachments(id),
 	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 	updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()

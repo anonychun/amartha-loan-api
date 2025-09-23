@@ -3,6 +3,7 @@ package loan
 import (
 	"context"
 
+	"github.com/anonychun/amartha-loan-api/internal/consts"
 	"github.com/anonychun/amartha-loan-api/internal/current"
 	"github.com/anonychun/amartha-loan-api/internal/entity"
 	"github.com/samber/lo"
@@ -23,9 +24,11 @@ func (u *Usecase) FindAll(ctx context.Context) ([]*LoanDto, error) {
 
 func (u *Usecase) Create(ctx context.Context, req CreateRequest) (*LoanDto, error) {
 	loan := &entity.Loan{
-		BorrowerId:      current.Borrower(ctx).Id,
-		PrincipalAmount: req.PrincipalAmount,
-		Status:          entity.LoanStatusProposed,
+		BorrowerId:           current.Borrower(ctx).Id,
+		PrincipalAmount:      req.PrincipalAmount,
+		Status:               entity.LoanStatusProposed,
+		BorrowerInterestRate: consts.LoanBorrowerInterestRate,
+		InvestorRoiRate:      consts.LoanInvestorRoiRate,
 	}
 
 	err := u.repository.Loan.Create(ctx, loan)
