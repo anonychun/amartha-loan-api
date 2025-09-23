@@ -1,11 +1,7 @@
 package repository
 
 import (
-	"context"
-
 	"github.com/anonychun/amartha-loan-api/internal/bootstrap"
-	"github.com/anonychun/amartha-loan-api/internal/current"
-	"github.com/anonychun/amartha-loan-api/internal/db"
 	"github.com/anonychun/amartha-loan-api/internal/repository/admin"
 	"github.com/anonychun/amartha-loan-api/internal/repository/admin_session"
 	"github.com/anonychun/amartha-loan-api/internal/repository/approval"
@@ -18,7 +14,6 @@ import (
 	"github.com/anonychun/amartha-loan-api/internal/repository/investor_session"
 	"github.com/anonychun/amartha-loan-api/internal/repository/loan"
 	"github.com/samber/do/v2"
-	"gorm.io/gorm"
 )
 
 func init() {
@@ -53,16 +48,4 @@ func NewRepository(i do.Injector) (*Repository, error) {
 		InvestorSession: do.MustInvoke[*investor_session.Repository](i),
 		Loan:            do.MustInvoke[*loan.Repository](i),
 	}, nil
-}
-
-func Transaction(ctx context.Context, fn func(ctx context.Context) error) error {
-	sql, err := do.Invoke[*db.Sql](bootstrap.Injector)
-	if err != nil {
-		return err
-	}
-
-	return sql.DB(ctx).Transaction(func(tx *gorm.DB) error {
-		ctx = current.SetTx(ctx, tx)
-		return fn(ctx)
-	})
 }

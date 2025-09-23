@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/anonychun/amartha-loan-api/internal/entity"
+	"github.com/google/uuid"
 )
 
 func (r *Repository) FindAll(ctx context.Context) ([]*entity.Investor, error) {
@@ -34,6 +35,16 @@ func (r *Repository) FindByEmailAddress(ctx context.Context, emailAddress string
 	}
 
 	return investor, nil
+}
+
+func (r *Repository) FindAllByIds(ctx context.Context, ids []uuid.UUID) ([]*entity.Investor, error) {
+	investors := make([]*entity.Investor, 0)
+	err := r.sql.DB(ctx).Where("id IN ?", ids).Find(&investors).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return investors, nil
 }
 
 func (r *Repository) Create(ctx context.Context, investor *entity.Investor) error {

@@ -74,6 +74,7 @@ CREATE TABLE loans (
 	borrower_interest_rate NUMERIC NOT NULL,
 	investor_roi_rate NUMERIC NOT NULL,
 	agreement_letter_id UUID REFERENCES attachments(id),
+	is_invested_notification_sent BOOLEAN NOT NULL DEFAULT FALSE,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 	updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/anonychun/amartha-loan-api/internal/entity"
+	"github.com/google/uuid"
 )
 
 func (r *Repository) FindById(ctx context.Context, id string) (*entity.Loan, error) {
@@ -66,10 +67,24 @@ func (r *Repository) FindAllByStatusInOrderByIdDesc(ctx context.Context, statuse
 	return loans, nil
 }
 
+func (r *Repository) FindAllByStatusAndIsInvestedNotificationSentFalse(ctx context.Context, status entity.LoanStatus) ([]*entity.Loan, error) {
+	loans := make([]*entity.Loan, 0)
+	err := r.sql.DB(ctx).Where("status = ? AND is_invested_notification_sent = FALSE", status).Order("id DESC").Find(&loans).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return loans, nil
+}
+
 func (r *Repository) Create(ctx context.Context, loan *entity.Loan) error {
 	return r.sql.DB(ctx).Create(loan).Error
 }
 
 func (r *Repository) Update(ctx context.Context, loan *entity.Loan) error {
 	return r.sql.DB(ctx).Save(loan).Error
+}
+
+func (r *Repository) UpdateIsInvestedNotificationSentByIdIn(ctx context.Context, isInvestedNotificationSent bool, ids []uuid.UUID) error {
+	return r.sql.DB(ctx).Model(&entity.Loan{}).Where("id IN ?", ids).Update("is_invested_notification_sent", isInvestedNotificationSent).Error
 }

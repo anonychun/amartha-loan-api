@@ -7,6 +7,16 @@ import (
 	"github.com/google/uuid"
 )
 
+func (r *Repository) FindAllByLoanIdIn(ctx context.Context, loanIds []uuid.UUID) ([]*entity.Investment, error) {
+	investments := make([]*entity.Investment, 0)
+	err := r.sql.DB(ctx).Where("loan_id IN ?", loanIds).Find(&investments).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return investments, nil
+}
+
 func (r *Repository) Create(ctx context.Context, investment *entity.Investment) error {
 	return r.sql.DB(ctx).Create(investment).Error
 }
